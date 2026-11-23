@@ -345,6 +345,7 @@ export function TemplateForm({
               {(field) => (
                 <div className="mt-6">
                   <SectionsList
+                    disabled={false}
                     items={field.state.value}
                     onChange={(items) => field.handleChange(items)}
                   />
