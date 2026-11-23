@@ -5,7 +5,7 @@ Fork de trabalho em https://github.com/jardelprad0/anarlog, baseado inicialmente
 As ferramentas de desenvolvimento desta máquina estão em `.tmp/local-tools`, `.tmp/cargo` e `.tmp/rustup`, fora do versionamento. Para usar esse ambiente a partir da raiz do checkout:
 
 ```sh
-export PATH="$PWD/.tmp/local-tools/node_modules/.bin:$PWD/.tmp/cargo/bin:$PATH"
+export PATH="$PWD/.tmp/local-tools/node_modules/.bin:$PWD/.tmp/cargo/bin:$PWD/.tmp/bin:$PWD/.tmp/build-python/cmake/data/bin:$PWD/.tmp/build-python/ninja/data/bin:$PATH"
 export CARGO_HOME="$PWD/.tmp/cargo"
 export RUSTUP_HOME="$PWD/.tmp/rustup"
 export CARGO_TARGET_DIR=/private/tmp/nautec-anarlog-target
@@ -14,7 +14,13 @@ pnpm -F @anlg/ui build
 pnpm -F @anlg/desktop build
 ```
 
-A compilação nativa e o teste de gravação ainda precisam ser concluídos antes de usar esta versão em reuniões. Os requisitos de instalação do upstream seguem em [CONTRIBUTING.md](CONTRIBUTING.md).
+A interface desktop compilou e os seis testes de consultas de templates passaram. O motor local de diarização passou na checagem Rust com o comando abaixo. O ajuste de stripping contorna uma incompatibilidade conhecida entre Rust/LLVM e o carregamento de bibliotecas no macOS 27.
+
+```sh
+cargo --config 'profile.dev.package."*".strip="none"' check --locked -p pyannote-local --lib
+```
+
+O ambiente local inclui Process Compose 1.124.0, CMake 4.4.5 e Ninja 1.13.2. A compilação do aplicativo nativo completo e o teste de gravação ainda precisam ser concluídos antes de usar esta versão em reuniões. Os requisitos de instalação do upstream seguem em [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ---
 
