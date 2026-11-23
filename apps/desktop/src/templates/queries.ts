@@ -17,9 +17,7 @@ import {
 } from "./template-icon";
 
 import { trackAnalyticsEvent } from "~/analytics";
-import { useBillingAccess } from "~/auth/billing-context";
 import { db, useDrizzleLiveQuery } from "~/db";
-import { useNotifyPlanRequired } from "~/settings/plan-gate";
 
 type TemplateRow = (typeof templates)["$inferSelect"];
 type NewTemplateRow = (typeof templates)["$inferInsert"];
@@ -179,14 +177,8 @@ export async function getTemplateById(
 export function useCreateTemplate(
   entryPoint: "templates" | "session_note" | "community" = "templates",
 ) {
-  const billing = useBillingAccess();
-  const notifyPlanRequired = useNotifyPlanRequired();
   const { mutateAsync } = useMutation({
     mutationFn: async (template: UserTemplateDraft) => {
-      if (entryPoint !== "community" && (!billing.isReady || !billing.isPro)) {
-        notifyPlanRequired("pro");
-        return;
-      }
       const id = crypto.randomUUID();
       const targets = assertCanonicalTemplateTargets(
         template.targets,
@@ -230,14 +222,8 @@ export function useCreateTemplate(
 }
 
 export function useSaveTemplate() {
-  const billing = useBillingAccess();
-  const notifyPlanRequired = useNotifyPlanRequired();
   const { mutateAsync } = useMutation({
     mutationFn: async (template: UserTemplate) => {
-      if (!billing.isReady || !billing.isPro) {
-        notifyPlanRequired("pro");
-        return;
-      }
       const targets = assertCanonicalTemplateTargets(
         template.targets,
         `save template ${template.id} targets`,

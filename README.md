@@ -1,3 +1,23 @@
+# NAUTEC — desenvolvimento sobre o Anarlog
+
+Fork de trabalho em https://github.com/jardelprad0/anarlog, baseado inicialmente na revisão `d63676cf82f8d15d423dd62e8e8bf44758f20b5f` de `fastrepl/anarlog`. A primeira alteração permite criar e editar templates locais independentemente de assinatura. Os avisos de licença e a documentação original estão preservados abaixo.
+
+As ferramentas de desenvolvimento desta máquina estão em `.tmp/local-tools`, `.tmp/cargo` e `.tmp/rustup`, fora do versionamento. Para usar esse ambiente a partir da raiz do checkout:
+
+```sh
+export PATH="$PWD/.tmp/local-tools/node_modules/.bin:$PWD/.tmp/cargo/bin:$PATH"
+export CARGO_HOME="$PWD/.tmp/cargo"
+export RUSTUP_HOME="$PWD/.tmp/rustup"
+export CARGO_TARGET_DIR=/private/tmp/nautec-anarlog-target
+export DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer
+pnpm -F @anlg/ui build
+pnpm -F @anlg/desktop build
+```
+
+A compilação nativa e o teste de gravação ainda precisam ser concluídos antes de usar esta versão em reuniões. Os requisitos de instalação do upstream seguem em [CONTRIBUTING.md](CONTRIBUTING.md).
+
+---
+
 > **Note:** The team is now building **[char](https://char.com)**. The **anarlog** community application remains open-source, MIT-licensed, and maintained as the local-first meeting notetaker in this repo. Source-visible enterprise components are commercially licensed.
 
 <div align="center">

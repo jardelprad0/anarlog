@@ -25,9 +25,7 @@ import {
 import { SectionsList } from "./sections-editor";
 import { TemplateIconPicker } from "./template-icon-picker";
 
-import { useBillingAccess } from "~/auth/billing-context";
 import { ResourceShareButton, sharedTemplatePayload } from "~/resource-sharing";
-import { PlanGate } from "~/settings/plan-gate";
 import { useSetSettingValue } from "~/settings/queries";
 import { useConfigValue } from "~/shared/config";
 
@@ -156,8 +154,6 @@ export function TemplateForm({
 }) {
   const { t } = useLingui();
   const { id } = template;
-  const { isPro, isReady } = useBillingAccess();
-  const canEdit = isReady && isPro;
   const saveTemplate = useSaveTemplate();
   const toggleTemplateFavorite = useToggleTemplateFavorite();
   const [actionsOpen, setActionsOpen] = useState(false);
@@ -201,7 +197,7 @@ export function TemplateForm({
   return (
     <div className="flex h-full flex-1 flex-col">
       <div className="flex h-12 items-center justify-between gap-3 pr-1 pl-3">
-        <PlanGate plan="pro" allowed={canEdit} className="min-w-0 flex-1">
+        <div className="min-w-0 flex-1">
           <div className="flex min-w-0 flex-1 items-center gap-2">
             <form.Field name="icon">
               {(field) => (
@@ -231,7 +227,7 @@ export function TemplateForm({
               )}
             </form.Field>
           </div>
-        </PlanGate>
+        </div>
         <div className="flex items-center gap-0">
           <ResourceShareButton
             resourceType="template"
@@ -322,7 +318,7 @@ export function TemplateForm({
 
       <div className="relative min-h-0 flex-1 overflow-hidden">
         <div className="scroll-fade-y h-full overflow-y-auto px-6 pt-3 pb-6">
-          <PlanGate plan="pro" allowed={canEdit}>
+          <div>
             <div className="min-w-0">
               <form.Field name="description">
                 {(field) => (
@@ -349,14 +345,13 @@ export function TemplateForm({
               {(field) => (
                 <div className="mt-6">
                   <SectionsList
-                    disabled={!canEdit}
                     items={field.state.value}
                     onChange={(items) => field.handleChange(items)}
                   />
                 </div>
               )}
             </form.Field>
-          </PlanGate>
+          </div>
         </div>
       </div>
     </div>

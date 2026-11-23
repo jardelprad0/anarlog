@@ -282,8 +282,9 @@ describe("template queries", () => {
     }
   });
 
-  it("blocks custom authoring on Free but preserves community template installation", async () => {
+  it("creates and edits local templates without a subscription or settled billing state", async () => {
     billing.isPro = false;
+    billing.isReady = false;
     const draft = { title: "Standup", description: "", sections: [] };
     const { result } = renderHook(
       () => ({
@@ -295,7 +296,9 @@ describe("template queries", () => {
     );
 
     await act(async () => {
-      await expect(result.current.create(draft)).resolves.toBeUndefined();
+      await expect(result.current.create(draft)).resolves.toEqual(
+        expect.any(String),
+      );
       await expect(
         result.current.save({
           ...draft,
@@ -303,9 +306,13 @@ describe("template queries", () => {
           pinned: false,
           icon: DEFAULT_TEMPLATE_ICON,
         }),
-      ).resolves.toBeUndefined();
+      ).resolves.toEqual("existing");
     });
-    expect(executeProxyMock).not.toHaveBeenCalled();
+    expect(executeProxyMock).toHaveBeenCalledWith(
+      expect.stringContaining('update "templates"'),
+      expect.any(Array),
+      "run",
+    );
 
     await act(async () => {
       await expect(result.current.install(draft)).resolves.toEqual(
